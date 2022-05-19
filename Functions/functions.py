@@ -3,28 +3,26 @@ import numpy as np
 from pandas.core.frame import DataFrame
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
+__author__ = "bc. Petra Nemčeková"
+__supervisor__ = "Ing. et Ing. Jana Schwarzerová MSc"
+__license__ = "MIT"
+__maintainer__ = "bc. Petra Nemčeková"
+__email__ = "xnemce05@vutbr.cz"
+
 
 def replaceColumnsWith1stRowValues(dataframe):
-
     result = dataframe
-    # fix headers with first row (names was previously in first column)
-    result.columns = result.iloc[0]
-    # drop first row
-    result = result.iloc[1:, :]
+    result.columns = result.iloc[0]  # fix headers with first row (names was previously in first column)
+    result = result.iloc[1:, :]  # drop first row
     return result
 
 
 def replaceIndexWith1stColumnValues(dataframe):
-
     result = dataframe
-    # fix index/rows with first column data
-    result.index = result.iloc[:, 0].values
+    result.index = result.iloc[:, 0].values  # fix index/rows with first column data
     firstColumnName = result.columns.values[0]
-    # drop first column
-    result = result.drop([firstColumnName], axis=1)
+    result = result.drop([firstColumnName], axis=1)  # drop first column
     return result
-
-# import csv
 
 
 def getFilePath(relativePath):
@@ -32,8 +30,6 @@ def getFilePath(relativePath):
 
 
 def getInterselectedWithFamilies(metabolome_dataframe, genome_dataframe):
-
-    # fix headers with first row
 
     genome_families_list = genome_dataframe.columns.values.tolist()
     metabolome_families_list = metabolome_dataframe.columns.values.tolist()
@@ -71,20 +67,12 @@ def standardizeValues(dataFrame: DataFrame) -> DataFrame:
 def PrepareForPrediction(metabolomic, genomic):
     standardized1 = standardizeValues(genomic)
 
-    # Shuffle
-
     perm = np.random.permutation(metabolomic.shape[0])
-    names = metabolomic.iloc[perm, :].index
 
     metabolome1_mixed = metabolomic.iloc[perm, :]
     genome1_mixed = standardized1.iloc[perm, :]
 
     identicifators = metabolome1_mixed.index
-
-    # To array
-
-    # met1_arr = metabolome1_mixed.values
-    # gen1_arr = genome1_mixed.values
 
     gen1_feature_names = list(genome1_mixed.columns)
 
